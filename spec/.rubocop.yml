@@ -1,0 +1,34 @@
+inherit_from: ../.rubocop.yml
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/LeadingCommentSpace:
+  Enabled: false
+
+Layout/SpaceBeforeComma:
+  Enabled: false
+
+Layout/SpaceBeforeComment:
+  Enabled: false
+
+Layout/SpaceInsideBrackets:
+  Enabled: false
+
+Layout/SpaceInsideParens:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+
+Security/YAMLLoad:
+  Enabled: false
+
+Style/BlockDelimiters:
+  IgnoredMethods: [ expect, let ]
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
