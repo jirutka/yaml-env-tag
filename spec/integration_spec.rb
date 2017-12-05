@@ -12,9 +12,14 @@ module YamlEnvTag
       ].each do |value, desc|
         context desc do
           let(:var_value) { value }
+          subject { YAML.load('!ENV SOME_VARIABLE') }
 
           it 'results in value of the variable' do
-            expect( YAML.load('!ENV SOME_VARIABLE') ).to eq var_value
+            is_expected.to eq var_value
+          end
+
+          it 'deserialized value is kind of String' do
+            is_expected.to be_kind_of String
           end
         end
       end

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
-require 'delegate'
 require 'yaml_env_tag/errors'
 
 module YamlEnvTag
-  # A value proxy for the +!ENV+ tag that "deserializes" the tag, i.e. reads
-  # the specified environment variable and holds its value.
-  class ValueProxy < ::SimpleDelegator
+  # A specialized String that holds a value of environment variable specified
+  # by +!ENV+ tag.
+  class EnvVariable < String
 
     # Deserializes from YAML. This method is called by {Psych}.
     #
-    # @param coder [Psych::Coder, #scalar]
+    # @param coder [Psych::Coder, #scalar] coder with name of the environment
+    #   variable to read.
     # @raise MissingEnvVariableError if the specified environment variable
     #   is not set (i.e. does not exist in +ENV+).
     def init_with(coder)
