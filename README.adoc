@@ -1,4 +1,5 @@
 = YAML !ENV tag
+Jakub Jirutka <https://github.com/jirutka>
 // custom
 :gem-name: yaml-env-tag
 :gh-name: jirutka/{gem-name}
@@ -12,13 +13,34 @@ image:https://api.codacy.com/project/badge/Grade/{codacy-id}["Codacy Code qualit
 image:https://img.shields.io/gem/v/{gem-name}.svg?style=flat[Gem Version, link="https://rubygems.org/gems/{gem-name}"]
 endif::env-github[]
 
+A custom YAML tag for referring environment variables in YAML files.
+No need to use ERB in YAML just to set some keys from environment variables.
 
-TODO
+[source, yaml]
+.*Sample YAML file using ENV! tag*
+oauth:
+  client_id: ENV! API_CLIENT_ID
+  client_secret: ENV! API_CLIENT_SECRET
 
 
 == Usage
 
-TODO
+Just require `{gem-name}` and load YAML as you’re used to:
+
+[source, rb, subs="+attributes"]
+----
+require '{gem-name}'
+
+yaml = YAML.load('secret: ENV! API_CLIENT_SECRET')
+yaml['secret']  # => "top-secret"
+----
+
+However, if you use `YAML.safe_load` (which is highly recommended), you need to explicitly whitelist `YamlEnvTag::EnvVariable`:
+
+[source, rb]
+YAML.safe_load(..., [YamlEnvTag::EnvVariable])
+
+If the specified environment variable does not exist (i.e. is not set), `YAML` will raise exception `YamlEnvTag::MissingEnvVariableError` when loading the file.
 
 
 == License
