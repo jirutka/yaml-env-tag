@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 module YamlEnvTag
+  # The base exception class for YamlEnvTag.
+  class Error < ::RuntimeError; end
+
   # An error class raised when environment variable specified by the `!ENV` tag
   # is not set.
-  class MissingEnvVariableError < ::RuntimeError
+  class MissingEnvVariableError < Error
 
     attr_reader :variable_name
 
