@@ -1,4 +1,4 @@
-= YAML !ENV tag
+= YAML !ENV Tag
 Jakub Jirutka <https://github.com/jirutka>
 // custom
 :gem-name: yaml-env-tag
