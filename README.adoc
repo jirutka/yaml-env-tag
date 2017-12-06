@@ -19,8 +19,9 @@ No need to use ERB in YAML just to set some keys from environment variables.
 [source, yaml]
 .*Sample YAML file using ENV! tag*
 oauth:
-  client_id: ENV! API_CLIENT_ID
-  client_secret: ENV! API_CLIENT_SECRET
+  base_uri: ENV! API_BASE_URI
+  client_id: ENV! [API_CLIENT_ID, "demo"]
+  client_secret: ENV! [API_CLIENT_SECRET, API_CLIENT_KEY, ~]
 
 
 == Usage
@@ -40,7 +41,40 @@ However, if you use `YAML.safe_load` (which is highly recommended), you need to 
 [source, rb]
 YAML.safe_load(..., [YamlEnvTag::EnvVariable])
 
-If the specified environment variable does not exist (i.e. is not set), `YAML` will raise exception `YamlEnvTag::MissingEnvVariableError` when loading the file.
+
+=== Single Required Variable
+
+Specify one environment variable as a `!ENV` tagged scalar.
+If it does not exist (is not set), `YAML.load` (and other load methods) will raise `YamlEnvTag::MissingEnvVariableError`.
+
+[source, yaml]
+!ENV SOME_VARIABLE
+
+This can be also written as a tagged sequence `!ENV [SOME_VARIABLE]` or `!ENV [SOME_VARIABLE, ~]`, all three variants are equivalent.
+
+
+=== Default Value
+
+You can define a default value that is used when the specified environment variable does not exist.
+This makes the variable optional.
+Default value is the last element of a `!ENV` tagged sequence (array) with more than one element.
+
+[source, yaml]
+!ENV [SOME_VARIABLE, "default value"]
+
+
+=== Multiple Variables (Fallbacks)
+
+You may also specify more environment variables in a `!ENV` tagged sequence (array) – the first one that does exist is used.
+Keep in mind that the last element of a multi-element sequence is always interpreted as a default value, not a name of environment variable!
+
+[source, yaml]
+!ENV [SOME_VARIABLE, LEGACY_VARIABLE, "default value"]
+
+If you want to raise an exception when none of the specified environment variables exist, use `~` (nil) as the last element:
+
+[source, yaml]
+!ENV [SOME_VARIABLE, LEGACY_VARIABLE, ~]
 
 
 == License
