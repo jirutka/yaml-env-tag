@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'yaml-env-tag'
 
 module YamlEnvTag
   describe '!ENV tag' do

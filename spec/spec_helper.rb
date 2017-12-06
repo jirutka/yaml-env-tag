@@ -1,5 +1,4 @@
 require 'rspec'
-require 'yaml-env-tag'
 
 RSpec.configure do |config|
   config.color = true
