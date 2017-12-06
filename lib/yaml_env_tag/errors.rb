@@ -4,7 +4,11 @@ module YamlEnvTag
   # The base exception class for YamlEnvTag.
   class Error < ::RuntimeError; end
 
-  # An error class raised when environment variable specified by the `!ENV` tag
+  # Exception raised when the +!ENV+ tag is used on a wrong node type
+  # or on empty node.
+  class InvalidUsageError < Error; end
+
+  # Exception raised when environment variable specified by the +!ENV+ tag
   # is not set.
   class MissingEnvVariableError < Error
 
