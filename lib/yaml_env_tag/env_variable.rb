@@ -36,7 +36,7 @@ module YamlEnvTag
       value ||= default_value
 
       raise MissingEnvVariableError, variables.last if value.nil?
-      super(value)
+      super(value.to_s)
     end
   end
 end
