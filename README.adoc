@@ -17,11 +17,11 @@ A custom YAML tag for referring environment variables in YAML files.
 No need to use ERB in YAML just to set some keys from environment variables.
 
 [source, yaml]
-.*Sample YAML file using ENV! tag*
+.*Sample YAML file using !ENV tag*
 oauth:
-  base_uri: ENV! API_BASE_URI
-  client_id: ENV! [API_CLIENT_ID, "demo"]
-  client_secret: ENV! [API_CLIENT_SECRET, API_CLIENT_KEY, ~]
+  base_uri: !ENV API_BASE_URI
+  client_id: !ENV [API_CLIENT_ID, "demo"]
+  client_secret: !ENV [API_CLIENT_SECRET, API_CLIENT_KEY, ~]
 
 
 == Usage
@@ -32,7 +32,7 @@ Just require `{gem-name}` and load YAML as you’re used to:
 ----
 require '{gem-name}'
 
-yaml = YAML.load('secret: ENV! API_CLIENT_SECRET')
+yaml = YAML.load('secret: !ENV API_CLIENT_SECRET')
 yaml['secret']  # => "top-secret"
 ----
 
