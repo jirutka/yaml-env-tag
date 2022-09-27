@@ -3,6 +3,10 @@ require 'yaml-env-tag'
 
 describe '!ENV tag' do
 
+  def yaml_load(yaml)
+    YAML.safe_load(yaml, permitted_classes: [YamlEnvTag::EnvVariable])
+  end
+
   context 'on scalar' do
     context 'with existing variable' do
       before { ENV['SOME_VARIABLE'] = var_value }
@@ -13,7 +17,7 @@ describe '!ENV tag' do
       ].each do |value, desc|
         context desc do
           let(:var_value) { value }
-          subject { YAML.load('!ENV SOME_VARIABLE') }
+          subject { yaml_load('!ENV SOME_VARIABLE') }
 
           it 'results in value of the variable' do
             is_expected.to eq var_value
@@ -31,7 +35,7 @@ describe '!ENV tag' do
 
       it 'raises MissingEnvVariableError' do
         expect {
-          YAML.load('!ENV NON_EXISTING')
+          yaml_load('!ENV NON_EXISTING')
         }.to raise_error YamlEnvTag::MissingEnvVariableError
       end
     end
@@ -61,7 +65,7 @@ describe '!ENV tag' do
       [ '!ENV [MISS, MISS2, "default"]'    , 'default'     ],
     ].each do |input, expected|
       context input do
-        subject { YAML.load(input) }
+        subject { yaml_load(input) }
 
         if expected == error
           it 'raises MissingEnvVariableError' do
@@ -82,7 +86,7 @@ describe '!ENV tag' do
     context 'empty' do
       it 'raises MissingEnvVariableError' do
         expect {
-          YAML.load('!ENV []')
+          yaml_load('!ENV []')
         }.to raise_error YamlEnvTag::MissingEnvVariableError
       end
     end
@@ -91,7 +95,7 @@ describe '!ENV tag' do
   context 'on map' do
     it 'raises InvalidUsageError' do
       expect {
-        YAML.load('!ENV { foo: 42 }')
+        yaml_load('!ENV { foo: 42 }')
       }.to raise_error YamlEnvTag::InvalidUsageError
     end
   end
@@ -99,7 +103,7 @@ describe '!ENV tag' do
   context 'on empty node' do
     it 'raises MissingEnvVariableError' do
       expect {
-        YAML.load('!ENV ')
+        yaml_load('!ENV ')
       }.to raise_error YamlEnvTag::MissingEnvVariableError
     end
   end
