@@ -32,14 +32,14 @@ Just require `{gem-name}` and load YAML as you’re used to:
 ----
 require '{gem-name}'
 
-yaml = YAML.load('secret: !ENV API_CLIENT_SECRET')
+yaml = YAML.safe_load('secret: !ENV API_CLIENT_SECRET', permitted_classes: [YamlEnvTag::EnvVariable])
 yaml['secret']  # => "top-secret"
 ----
 
-However, if you use `YAML.safe_load` (which is highly recommended), you need to explicitly whitelist `YamlEnvTag::EnvVariable`:
-
-[source, rb]
-YAML.safe_load(..., [YamlEnvTag::EnvVariable])
+*Note:* Since Ruby 3.1, `YAML.load` is an alias for `YAML.safe_load`, which means you have to explicitly whitelist the `YamlEnvTag::EnvVariable` class (see keyword argument `permitted_classes`).
+Analogously, `YAML.load_file` became an alias for `YAML.safe_load_file`.
+Also keep in mind that the _safe_ variant disables aliases (anchors); you can enable them by setting the `aliases` parameter to `true` (e.g. `YAML.safe_load(..., aliases: true)`).
+For compatibility with older Ruby versions, it’s better to always use `YAML.safe_load` and `YAML.safe_load_file`.
 
 
 === Single Required Variable
